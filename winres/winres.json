@@ -7,21 +7,9 @@
   "RT_MANIFEST": {
     "1": {
       "0409": {
-        "identity": {
-          "name": "yueyou-launcher",
-          "version": "1.0.0.0"
-        },
         "description": "悦游网单游戏启动器",
-        "minimum-os": "6.1",
         "execution-level": "asInvoker",
-        "dpi-awareness": "system",
-        "supported-OS": [
-          "Windows 7",
-          "Windows 8",
-          "Windows 8.1",
-          "Windows 10",
-          "Windows 11"
-        ]
+        "dpi-awareness": "system"
       }
     }
   },
