@@ -1,0 +1,14 @@
+{
+  "official_url": "http://www.yueyoue.cn",
+  "download_url": "http://www.yueyoue.cn",
+  "tutorial_url": "http://www.yueyoue.cn",
+  "client_url": "http://www.yueyoue.cn",
+  "update_url": "",
+  "local_list_exe": "tools\\本地列表.exe",
+  "patch_file": "patch\\client_patch.zip",
+  "server_exe": "server\\GameServer.exe",
+  "launcher_exe": "client\\GameLauncher.exe",
+  "viewer_exe": "tools\\物品查看器.exe",
+  "foot_note": "官网：http://www.yueyoue.cn",
+  "xianyu_id": "闲鱼ID：悦游网单"
+}
