@@ -1,0 +1,57 @@
+{
+  "RT_GROUP_ICON": {
+    "APP": {
+      "0000": "icon.png"
+    }
+  },
+  "RT_MANIFEST": {
+    "1": {
+      "0409": {
+        "identity": {
+          "name": "yueyou-launcher",
+          "version": "1.0.0.0"
+        },
+        "description": "悦游网单游戏启动器",
+        "minimum-os": "6.1",
+        "execution-level": "asInvoker",
+        "dpi-awareness": "system",
+        "supported-OS": [
+          "Windows 7",
+          "Windows 8",
+          "Windows 8.1",
+          "Windows 10",
+          "Windows 11"
+        ]
+      }
+    }
+  },
+  "RT_VERSION": {
+    "#1": {
+      "0000": {
+        "FixedFileInfo": {
+          "FileFlagsMask": "3f",
+          "FileFlags": "0",
+          "FileOS": "40004",
+          "FileType": "1",
+          "FileSubType": "0"
+        },
+        "StringFileInfo": {
+          "0804": {
+            "CompanyName": "悦游网单",
+            "FileDescription": "悦游网单游戏启动器",
+            "FileVersion": "1.0.0.0",
+            "InternalName": "yueyou-launcher",
+            "OriginalFilename": "YueyouLauncher.exe",
+            "ProductName": "悦游网单游戏启动器",
+            "ProductVersion": "1.0.0.0"
+          }
+        },
+        "VarFileInfo": {
+          "0804": {
+            "Translation": 2052
+          }
+        }
+      }
+    }
+  }
+}
