@@ -29,8 +29,11 @@ jobs:
       - name: Install go-winres
         run: go install github.com/tc-hib/go-winres@latest
 
+      - name: Generate go.sum
+        run: go mod tidy
+
       - name: Generate resources
-        run: go-winres make  --product-version=1.0.0 --file-version=1.0.0
+        run: go-winres make --product-version=1.0.0 --file-version=1.0.0
 
       - name: Build
         shell: cmd
