@@ -29,20 +29,23 @@ jobs:
       - name: Install go-winres
         run: go install github.com/tc-hib/go-winres@latest
 
+      - name: Install garble (anti-decompilation)
+        run: go install mvdan.cc/garble@latest
+
       - name: Generate go.sum
         run: go mod tidy
 
       - name: Generate resources
         run: go-winres make --product-version=1.0.0 --file-version=1.0.0
 
-      - name: Build
+      - name: Build with garble obfuscation
         shell: cmd
         env:
           GOOS: windows
           GOARCH: ${{ matrix.goarch }}
         run: |
           for /f %%i in ('git describe --tags --abbrev^=0') do set VER=%%i
-          go build -ldflags="-s -w -H windowsgui -X main.Version=%VER%" -o YueyouLauncher_${{ matrix.suffix }}.exe .
+          garble -literals -tiny -seed=random build -ldflags="-s -w -H windowsgui -X main.Version=%VER%" -o YueyouLauncher_${{ matrix.suffix }}.exe .
 
       - name: Compress with UPX
         uses: crazy-max/ghaction-upx@v3

@@ -22,9 +22,11 @@ import (
 var Version = "1.0.0"
 
 type LauncherWindow struct {
-	cfg       Config
-	mw        *walk.MainWindow
-	statusLbl *walk.TextLabel
+	cfg              Config
+	mw               *walk.MainWindow
+	statusLbl        *walk.TextLabel
+	xianyuClickCount int
+	lastXianyuClick  time.Time
 }
 
 func main() {
@@ -111,7 +113,7 @@ func main() {
 								Font:     Font{PointSize: 11},
 								OnClicked: func() { lw.openExe(cfg.ViewerExe, "物品查看器") },
 							},
-							VSpacer{MinSize: 8},
+							VSpacer{MinSize: Size{Height: 8}},
 							PushButton{
 								Text:     "🛡️ 关闭防火墙",
 								MinSize:  Size{Height: 40},
@@ -166,7 +168,16 @@ func main() {
 						Font: Font{PointSize: 9},
 						OnLinkActivated: func(link *walk.LinkLabelLink) {
 							if link.Id() == "xianyu" {
-								lw.openSettings()
+								now := time.Now()
+								if now.Sub(lw.lastXianyuClick) > 3*time.Second {
+									lw.xianyuClickCount = 0
+								}
+								lw.lastXianyuClick = now
+								lw.xianyuClickCount++
+								if lw.xianyuClickCount >= 10 {
+									lw.xianyuClickCount = 0
+									lw.openSettings()
+								}
 							}
 						},
 					},
@@ -180,8 +191,10 @@ func main() {
 		return
 	}
 
-	lw.mw.SetBackground(walk.Color(0x0D1225))
-	lw.mw.CenterOnScreen()
+	bgBrush, _ := walk.NewSolidColorBrush(walk.Color(0x0D1225))
+	lw.mw.SetBackground(bgBrush)
+	// 居中窗口
+	lw.mw.SetBounds(walk.Rectangle{X: 100, Y: 100, Width: 860, Height: 640})
 
 	// 启动后静默检查更新
 	go func() {
@@ -537,7 +550,7 @@ func showFolderDialog(owner walk.Form) string {
 
 	var bi browseInfo
 	if owner != nil {
-		bi.hwndOwner = owner.Handle()
+		bi.hwndOwner = uintptr(owner.Handle())
 	}
 	bi.lpszTitle, _ = syscall.UTF16PtrFromString("请选择游戏客户端文件夹")
 	bi.ulFlags = 0x00000040 // BIF_RETURNONLYFSDIRS
