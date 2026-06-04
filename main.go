@@ -191,10 +191,13 @@ func main() {
 		return
 	}
 
-	bgBrush, _ := walk.NewSolidColorBrush(walk.Color(0x0D1225))
-	lw.mw.SetBackground(bgBrush)
-	// 居中窗口
-	lw.mw.SetBounds(walk.Rectangle{X: 100, Y: 100, Width: 860, Height: 640})
+	// 延迟设置背景和窗口位置，避免 TTM_ADDTOOL 错误
+	go func() {
+		time.Sleep(100 * time.Millisecond)
+		bgBrush, _ := walk.NewSolidColorBrush(walk.Color(0x0D1225))
+		lw.mw.SetBackground(bgBrush)
+		lw.mw.SetBounds(walk.Rectangle{X: 100, Y: 100, Width: 860, Height: 640})
+	}()
 
 	// 启动后静默检查更新
 	go func() {
