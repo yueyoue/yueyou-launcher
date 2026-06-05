@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -29,7 +25,7 @@ namespace YueyouLauncher
 
         private void SetupUI()
         {
-            this.Text = "\u60a6\u6e38\u7f51\u5355\u6e38\u620f\u542f\u52a8\u5668";
+            this.Text = "悦游网单游戏启动器";
             this.Size = new Size(880, 660);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -38,7 +34,7 @@ namespace YueyouLauncher
             this.ForeColor = Color.White;
             this.Font = new Font("Microsoft YaHei", 9f);
 
-            // ===== Title bar =====
+            // ===== 标题栏 =====
             Panel titlePanel = new Panel();
             titlePanel.Dock = DockStyle.Top;
             titlePanel.Height = 56;
@@ -46,7 +42,7 @@ namespace YueyouLauncher
             titlePanel.Padding = new Padding(20, 0, 12, 0);
 
             Label titleLabel = new Label();
-            titleLabel.Text = "\ud83c\udfae \u60a6\u6e38\u7f51\u5355\u6e38\u620f\u542f\u52a8\u5668";
+            titleLabel.Text = "🎮 悦游网单游戏启动器";
             titleLabel.Font = new Font("Microsoft YaHei", 14f, FontStyle.Bold);
             titleLabel.ForeColor = Color.White;
             titleLabel.AutoSize = true;
@@ -61,14 +57,14 @@ namespace YueyouLauncher
             versionLabel.Location = new Point(600, 20);
             titlePanel.Controls.Add(versionLabel);
 
-            Button updateBtn = CreateButton("\ud83d\udd04 \u68c0\u67e5\u66f4\u65b0", 100, 28, 9f, false);
+            Button updateBtn = CreateButton("🔄 检查更新", 100, 28, 9f, false);
             updateBtn.Location = new Point(720, 12);
             updateBtn.Click += (s, e) => CheckUpdate(true);
             titlePanel.Controls.Add(updateBtn);
 
             this.Controls.Add(titlePanel);
 
-            // ===== Status bar =====
+            // ===== 状态栏 =====
             Panel statusPanel = new Panel();
             statusPanel.Dock = DockStyle.Top;
             statusPanel.Height = 28;
@@ -76,7 +72,7 @@ namespace YueyouLauncher
             statusPanel.Padding = new Padding(20, 0, 20, 0);
 
             statusLabel = new Label();
-            statusLabel.Text = "\u25cf \u5c31\u7eea";
+            statusLabel.Text = "● 就绪";
             statusLabel.ForeColor = Color.LightGreen;
             statusLabel.Font = new Font("Microsoft YaHei", 9f);
             statusLabel.AutoSize = true;
@@ -85,43 +81,43 @@ namespace YueyouLauncher
 
             this.Controls.Add(statusPanel);
 
-            // ===== Main content =====
+            // ===== 主内容区 =====
             Panel mainPanel = new Panel();
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Padding = new Padding(20, 8, 20, 8);
 
-            // --- Left sidebar ---
+            // --- 左侧功能栏 ---
             Panel leftPanel = new Panel();
             leftPanel.Location = new Point(20, 8);
             leftPanel.Size = new Size(200, 480);
 
             int y = 0;
-            leftPanel.Controls.Add(MakeButton("\ud83c\udf10 \u5b98\u65b9\u7f51\u7ad9", 40, y, () => OpenURL(cfg.OfficialURL)));
+            leftPanel.Controls.Add(MakeButton("🌐 官方网站", 40, y, () => OpenURL(cfg.OfficialURL)));
             y += 48;
-            leftPanel.Controls.Add(MakeButton("\ud83d\udce5 \u4e0b\u8f7d\u5de5\u5177", 40, y, () => OpenURL(cfg.DownloadURL)));
+            leftPanel.Controls.Add(MakeButton("📥 下载工具", 40, y, () => OpenURL(cfg.DownloadURL)));
             y += 48;
-            leftPanel.Controls.Add(MakeButton("\ud83d\udcd6 \u4f7f\u7528\u6559\u7a0b", 40, y, () => OpenURL(cfg.TutorialURL)));
+            leftPanel.Controls.Add(MakeButton("📖 使用教程", 40, y, () => OpenURL(cfg.TutorialURL)));
             y += 48;
-            leftPanel.Controls.Add(MakeButton("\ud83d\udd0d \u7269\u54c1\u67e5\u770b\u5668", 40, y, () => OpenExe(cfg.ViewerExe, "\u7269\u54c1\u67e5\u770b\u5668")));
+            leftPanel.Controls.Add(MakeButton("🔍 物品查看器", 40, y, () => OpenExe(cfg.ViewerExe, "物品查看器")));
             y += 56;
-            leftPanel.Controls.Add(MakeButton("\ud83d\udee1\ufe0f \u5173\u95ed\u9632\u706b\u5899", 40, y, () => ToggleFirewall()));
+            leftPanel.Controls.Add(MakeButton("🛡️ 关闭防火墙", 40, y, () => ToggleFirewall()));
             y += 48;
-            leftPanel.Controls.Add(MakeButton("\ud83d\udee1\ufe0f \u5173\u95ed\u6740\u6bd2\u8f6f\u4ef6", 40, y, () => ToggleDefender()));
+            leftPanel.Controls.Add(MakeButton("🛡️ 关闭杀毒软件", 40, y, () => ToggleDefender()));
             y += 56;
 
-            Button killBtn = MakeButton("\u26a1 \u4e00\u952e\u5173\u95ed\u670d\u52a1\u7aef", 44, y, () => KillGameServer());
+            Button killBtn = MakeButton("⚡ 一键关闭服务端", 44, y, () => KillGameServer());
             killBtn.Font = new Font("Microsoft YaHei", 11f, FontStyle.Bold);
             leftPanel.Controls.Add(killBtn);
 
             mainPanel.Controls.Add(leftPanel);
 
-            // --- Right steps area ---
+            // --- 右侧步骤区 ---
             Panel rightPanel = new Panel();
             rightPanel.Location = new Point(240, 8);
             rightPanel.Size = new Size(600, 480);
 
             Label stepsTitle = new Label();
-            stepsTitle.Text = "\u6e38\u620f\u542f\u52a8\u6b65\u9aa4";
+            stepsTitle.Text = "游戏启动步骤";
             stepsTitle.Font = new Font("Microsoft YaHei", 9f);
             stepsTitle.ForeColor = Color.Gray;
             stepsTitle.AutoSize = true;
@@ -129,17 +125,17 @@ namespace YueyouLauncher
             rightPanel.Controls.Add(stepsTitle);
 
             int sy = 30;
-            rightPanel.Controls.Add(MakeStepCard("\u6b65\u9aa4 1", "\u4e0b\u8f7d\u5ba2\u6237\u7aef", "\u4e0b\u8f7d\u6e38\u620f\u5ba2\u6237\u7aef\u5b89\u88c5\u5305", () => OpenURL(cfg.ClientURL), ref sy));
-            rightPanel.Controls.Add(MakeStepCard("\u6b65\u9aa4 2", "\u6253\u5f00\u672c\u5730\u5217\u8868", "\u542f\u52a8\u670d\u52a1\u5668\u5217\u8868\u67e5\u770b\u5de5\u5177", () => OpenExe(cfg.LocalListExe, "\u672c\u5730\u5217\u8868"), ref sy));
-            rightPanel.Controls.Add(MakeStepCard("\u6b65\u9aa4 3", "\u5b89\u88c5\u5ba2\u6237\u7aef\u8865\u4e01", "\u9009\u62e9\u5ba2\u6237\u7aef\u76ee\u5f55\u540e\u81ea\u52a8\u89e3\u538b\u8865\u4e01", () => InstallPatch(), ref sy));
-            rightPanel.Controls.Add(MakeStepCard("\u6b65\u9aa4 4", "\u542f\u52a8\u670d\u52a1\u5668", "\u542f\u52a8\u6e38\u620f\u670d\u52a1\u7aef\u7a0b\u5e8f", () => StartServer(), ref sy));
-            rightPanel.Controls.Add(MakeStepCard("\u6b65\u9aa4 5", "\u6253\u5f00\u767b\u9646\u5668", "\u542f\u52a8\u6e38\u620f\u5ba2\u6237\u7aef\u767b\u9646\u5668", () => OpenExe(cfg.LauncherExe, "\u767b\u9646\u5668"), ref sy));
+            rightPanel.Controls.Add(MakeStepCard("步骤 1", "下载客户端", "下载游戏客户端安装包", () => OpenURL(cfg.ClientURL), ref sy));
+            rightPanel.Controls.Add(MakeStepCard("步骤 2", "打开本地列表", "启动服务器列表查看工具", () => OpenExe(cfg.LocalListExe, "本地列表"), ref sy));
+            rightPanel.Controls.Add(MakeStepCard("步骤 3", "安装客户端补丁", "选择客户端目录后自动解压补丁", () => InstallPatch(), ref sy));
+            rightPanel.Controls.Add(MakeStepCard("步骤 4", "启动服务器", "启动游戏服务端程序", () => StartServer(), ref sy));
+            rightPanel.Controls.Add(MakeStepCard("步骤 5", "打开登陆器", "启动游戏客户端登陆器", () => OpenExe(cfg.LauncherExe, "登陆器"), ref sy));
 
             mainPanel.Controls.Add(rightPanel);
 
             this.Controls.Add(mainPanel);
 
-            // ===== Bottom bar =====
+            // ===== 底部栏 =====
             Panel bottomPanel = new Panel();
             bottomPanel.Dock = DockStyle.Bottom;
             bottomPanel.Height = 32;
@@ -152,7 +148,7 @@ namespace YueyouLauncher
             footerLink.ActiveLinkColor = Color.White;
             footerLink.AutoSize = true;
             footerLink.Location = new Point(20, 8);
-            footerLink.LinkClicked += (s, e) => { try { Process.Start(cfg.OfficialURL); } catch { } };
+            footerLink.LinkClicked += (s, e) => { try { Process.Start(new ProcessStartInfo(cfg.OfficialURL) { UseShellExecute = true }); } catch { } };
             bottomPanel.Controls.Add(footerLink);
 
             LinkLabel xianyuLink = new LinkLabel();
@@ -241,7 +237,7 @@ namespace YueyouLauncher
             card.Controls.Add(descLabel);
 
             Button openBtn = new Button();
-            openBtn.Text = "\u6253\u5f00";
+            openBtn.Text = "打开";
             openBtn.Size = new Size(70, 30);
             openBtn.Location = new Point(510, 13);
             openBtn.FlatStyle = FlatStyle.Flat;
@@ -264,8 +260,8 @@ namespace YueyouLauncher
 
         private void OpenURL(string url)
         {
-            try { Process.Start(url); }
-            catch (Exception ex) { MessageBox.Show("\u6253\u5f00\u94fe\u63a5\u5931\u8d25\uff1a" + ex.Message, "\u9519\u8bef", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            try { Process.Start(new ProcessStartInfo(url) { UseShellExecute = true }); }
+            catch (Exception ex) { MessageBox.Show("打开链接失败：" + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
 
         private void OpenExe(string relPath, string name)
@@ -273,23 +269,24 @@ namespace YueyouLauncher
             string fullPath = ResolvePath(relPath);
             if (!File.Exists(fullPath))
             {
-                MessageBox.Show("\u627e\u4e0d\u5230 " + name + "\uff1a\n" + fullPath, "\u63d0\u793a", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("找不到 " + name + "：\n" + fullPath, "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             try
             {
                 ProcessStartInfo psi = new ProcessStartInfo(fullPath);
                 psi.WorkingDirectory = Path.GetDirectoryName(fullPath);
+                psi.UseShellExecute = true;
                 Process.Start(psi);
             }
-            catch (Exception ex) { MessageBox.Show("\u542f\u52a8 " + name + " \u5931\u8d25\uff1a\n" + ex.Message, "\u9519\u8bef", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            catch (Exception ex) { MessageBox.Show("启动 " + name + " 失败：\n" + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
 
         private void ToggleFirewall()
         {
-            if (MessageBox.Show("\u786e\u5b9a\u8981\u5173\u95ed Windows \u9632\u706b\u5899\u5417\uff1f\n\u8fd9\u53ef\u80fd\u4f1a\u964d\u4f4e\u7cfb\u7edf\u5b89\u5168\u6027\u3002", "\u786e\u8ba4", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+            if (MessageBox.Show("确定要关闭 Windows 防火墙吗？\n这可能会降低系统安全性。", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 return;
-            SetStatus("\u6b63\u5728\u5173\u95ed\u9632\u706b\u5899...");
+            SetStatus("正在关闭防火墙...");
             try
             {
                 ProcessStartInfo psi = new ProcessStartInfo("netsh", "advfirewall set allprofiles state off");
@@ -297,21 +294,21 @@ namespace YueyouLauncher
                 psi.UseShellExecute = false;
                 Process p = Process.Start(psi);
                 p.WaitForExit();
-                MessageBox.Show("Windows \u9632\u706b\u5899\u5df2\u5173\u95ed\u3002", "\u6210\u529f", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                SetStatus("\u25cf \u9632\u706b\u5899\u5df2\u5173\u95ed");
+                MessageBox.Show("Windows 防火墙已关闭。", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SetStatus("● 防火墙已关闭");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("\u5173\u95ed\u9632\u706b\u5899\u5931\u8d25\uff0c\u8bf7\u53f3\u952e\u4ee5\u7ba1\u7406\u5458\u8eab\u4efd\u8fd0\u884c\u672c\u7a0b\u5e8f\u3002\n\n" + ex.Message, "\u63d0\u793a", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                SetStatus("\u5173\u95ed\u9632\u706b\u5899\u5931\u8d25");
+                MessageBox.Show("关闭防火墙失败，请右键以管理员身份运行本程序。\n\n" + ex.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                SetStatus("关闭防火墙失败");
             }
         }
 
         private void ToggleDefender()
         {
-            if (MessageBox.Show("\u786e\u5b9a\u8981\u5173\u95ed Windows Defender \u5b9e\u65f6\u4fdd\u62a4\u5417\uff1f\n\u5efa\u8bae\u540c\u65f6\u5173\u95ed\u7b2c\u4e09\u65b9\u6740\u6bd2\u8f6f\u4ef6\u3002", "\u786e\u8ba4", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+            if (MessageBox.Show("确定要关闭 Windows Defender 实时保护吗？\n建议同时关闭第三方杀毒软件。", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                 return;
-            SetStatus("\u6b63\u5728\u5173\u95ed\u6740\u6bd2\u8f6f\u4ef6...");
+            SetStatus("正在关闭杀毒软件...");
             try
             {
                 ProcessStartInfo psi = new ProcessStartInfo("powershell", "-ExecutionPolicy Bypass -Command \"Set-MpPreference -DisableRealtimeMonitoring $true\"");
@@ -319,21 +316,21 @@ namespace YueyouLauncher
                 psi.UseShellExecute = false;
                 Process p = Process.Start(psi);
                 p.WaitForExit();
-                MessageBox.Show("Windows Defender \u5b9e\u65f6\u4fdd\u62a4\u5df2\u5173\u95ed\u3002\n\u8bf7\u624b\u52a8\u5173\u95ed\u7b2c\u4e09\u65b9\u6740\u6bd2\u8f6f\u4ef6\u3002", "\u6210\u529f", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                SetStatus("\u25cf Defender \u5df2\u5173\u95ed");
+                MessageBox.Show("Windows Defender 实时保护已关闭。\n请手动关闭第三方杀毒软件。", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SetStatus("● Defender 已关闭");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("\u5173\u95ed Defender \u5931\u8d25\uff0c\u53ef\u80fd\u9700\u8981\u7ba1\u7406\u5458\u6743\u9650\u3002\n\u8bf7\u53f3\u952e\u4ee5\u7ba1\u7406\u5458\u8eab\u4efd\u8fd0\u884c\u672c\u7a0b\u5e8f\u3002\n\n" + ex.Message, "\u63d0\u793a", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                SetStatus("\u5173\u95ed\u6740\u6bd2\u8f6f\u4ef6\u5931\u8d25");
+                MessageBox.Show("关闭 Defender 失败，可能需要管理员权限。\n请右键以管理员身份运行本程序。\n\n" + ex.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                SetStatus("关闭杀毒软件失败");
             }
         }
 
         private void KillGameServer()
         {
-            if (MessageBox.Show("\u786e\u5b9a\u8981\u5173\u95ed\u6e38\u620f\u670d\u52a1\u7aef\u5417\uff1f", "\u786e\u8ba4", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            if (MessageBox.Show("确定要关闭游戏服务端吗？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
-            SetStatus("\u6b63\u5728\u5173\u95ed\u670d\u52a1\u7aef...");
+            SetStatus("正在关闭服务端...");
             try
             {
                 string serverPath = ResolvePath(cfg.ServerExe);
@@ -343,40 +340,40 @@ namespace YueyouLauncher
                 psi.UseShellExecute = false;
                 Process p = Process.Start(psi);
                 p.WaitForExit();
-                MessageBox.Show("\u6e38\u620f\u670d\u52a1\u7aef\u5df2\u5173\u95ed\u3002", "\u6210\u529f", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                SetStatus("\u25cf \u670d\u52a1\u7aef\u5df2\u5173\u95ed");
+                MessageBox.Show("游戏服务端已关闭。", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SetStatus("● 服务端已关闭");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("\u5173\u95ed\u670d\u52a1\u7aef\uff1a\n" + ex.Message, "\u63d0\u793a", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                SetStatus("\u25cf \u670d\u52a1\u7aef\u5df2\u5173\u95ed");
+                MessageBox.Show("关闭服务端：\n" + ex.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SetStatus("● 服务端已关闭");
             }
         }
 
         private void InstallPatch()
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.Description = "\u8bf7\u9009\u62e9\u6e38\u620f\u5ba2\u6237\u7aef\u6240\u5728\u7684\u6587\u4ef6\u5939";
+            fbd.Description = "请选择游戏客户端所在的文件夹";
             if (fbd.ShowDialog() != DialogResult.OK)
                 return;
 
             string patchPath = ResolvePath(cfg.PatchFile);
             if (!File.Exists(patchPath))
             {
-                MessageBox.Show("\u627e\u4e0d\u5230\u8865\u4e01\u6587\u4ef6\uff1a\n" + patchPath, "\u9519\u8bef", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("找不到补丁文件：\n" + patchPath, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            SetStatus("\u6b63\u5728\u89e3\u538b\u8865\u4e01...");
+            SetStatus("正在解压补丁...");
             try
             {
-                ExtractZip(patchPath, fbd.SelectedPath);
-                MessageBox.Show("\u5ba2\u6237\u7aef\u8865\u4e01\u5df2\u5b89\u88c5\u5230\uff1a\n" + fbd.SelectedPath, "\u6210\u529f", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                SetStatus("\u25cf \u8865\u4e01\u5b89\u88c5\u5b8c\u6210");
+                ZipFile.ExtractToDirectory(patchPath, fbd.SelectedPath);
+                MessageBox.Show("客户端补丁已安装到：\n" + fbd.SelectedPath, "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SetStatus("● 补丁安装完成");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("\u89e3\u538b\u8865\u4e01\u5931\u8d25\uff1a\n" + ex.Message, "\u9519\u8bef", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                SetStatus("\u89e3\u538b\u8865\u4e01\u5931\u8d25");
+                MessageBox.Show("解压补丁失败：\n" + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SetStatus("解压补丁失败");
             }
         }
 
@@ -385,21 +382,22 @@ namespace YueyouLauncher
             string serverPath = ResolvePath(cfg.ServerExe);
             if (!File.Exists(serverPath))
             {
-                MessageBox.Show("\u627e\u4e0d\u5230\u670d\u52a1\u7aef\u7a0b\u5e8f\uff1a\n" + serverPath, "\u9519\u8bef", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("找不到服务端程序：\n" + serverPath, "错误", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            SetStatus("\u6b63\u5728\u542f\u52a8\u670d\u52a1\u7aef...");
+            SetStatus("正在启动服务端...");
             try
             {
                 ProcessStartInfo psi = new ProcessStartInfo(serverPath);
                 psi.WorkingDirectory = Path.GetDirectoryName(serverPath);
+                psi.UseShellExecute = true;
                 Process.Start(psi);
-                SetStatus("\u25cf \u670d\u52a1\u7aef\u8fd0\u884c\u4e2d");
+                SetStatus("● 服务端运行中");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("\u542f\u52a8\u670d\u52a1\u7aef\u5931\u8d25\uff1a\n" + ex.Message, "\u9519\u8bef", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                SetStatus("\u542f\u52a8\u670d\u52a1\u7aef\u5931\u8d25");
+                MessageBox.Show("启动服务端失败：\n" + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SetStatus("启动服务端失败");
             }
         }
 
@@ -407,14 +405,13 @@ namespace YueyouLauncher
         {
             if (string.IsNullOrEmpty(cfg.UpdateURL))
             {
-                if (manual) MessageBox.Show("\u672a\u914d\u7f6e\u66f4\u65b0\u5730\u5740\u3002", "\u63d0\u793a", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (manual) MessageBox.Show("未配置更新地址。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             try
             {
                 WebClient wc = new WebClient();
                 string json = wc.DownloadString(cfg.UpdateURL);
-                // Simple JSON parse for {"version":"x.x.x","download_url":"...","changelog":"..."}
                 string ver = GetJsonValue(json, "version");
                 string dlUrl = GetJsonValue(json, "download_url");
                 string changelog = GetJsonValue(json, "changelog");
@@ -422,23 +419,23 @@ namespace YueyouLauncher
 
                 if (ver == currentVer)
                 {
-                    if (manual) MessageBox.Show("\u5f53\u524d\u5df2\u662f\u6700\u65b0\u7248\u672c v" + currentVer, "\u63d0\u793a", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (manual) MessageBox.Show("当前已是最新版本 v" + currentVer, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
-                string msg = string.Format("\u53d1\u73b0\u65b0\u7248\u672c v{0}\uff01\n\n\u66f4\u65b0\u5185\u5bb9\uff1a\n{1}\n\n\u662f\u5426\u7acb\u5373\u66f4\u65b0\uff1f", ver, changelog);
-                if (MessageBox.Show(msg, "\u53d1\u73b0\u66f4\u65b0", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                string msg = string.Format("发现新版本 v{0}！\n\n更新内容：\n{1}\n\n是否立即更新？", ver, changelog);
+                if (MessageBox.Show(msg, "发现更新", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     OpenURL(dlUrl);
             }
             catch (Exception ex)
             {
-                if (manual) MessageBox.Show("\u68c0\u67e5\u66f4\u65b0\u5931\u8d25\uff1a\n" + ex.Message, "\u9519\u8bef", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (manual) MessageBox.Show("检查更新失败：\n" + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void OpenSettings()
         {
             Form settingsForm = new Form();
-            settingsForm.Text = "\u2699 \u8bbe\u7f6e";
+            settingsForm.Text = "⚙ 设置";
             settingsForm.Size = new Size(540, 540);
             settingsForm.StartPosition = FormStartPosition.CenterParent;
             settingsForm.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -449,23 +446,23 @@ namespace YueyouLauncher
             settingsForm.Font = new Font("Microsoft YaHei", 9f);
 
             int y = 10;
-            AddSettingsField(settingsForm, "\u5b98\u65b9\u7f51\u7ad9:", "OfficialURL", cfg.OfficialURL, ref y);
-            AddSettingsField(settingsForm, "\u4e0b\u8f7d\u5de5\u5177:", "DownloadURL", cfg.DownloadURL, ref y);
-            AddSettingsField(settingsForm, "\u4f7f\u7528\u6559\u7a0b:", "TutorialURL", cfg.TutorialURL, ref y);
-            AddSettingsField(settingsForm, "\u5ba2\u6237\u7aef\u4e0b\u8f7d:", "ClientURL", cfg.ClientURL, ref y);
-            AddSettingsField(settingsForm, "\u66f4\u65b0\u68c0\u6d4b(JSON):", "UpdateURL", cfg.UpdateURL, ref y);
+            AddSettingsField(settingsForm, "官方网站:", "OfficialURL", cfg.OfficialURL, ref y);
+            AddSettingsField(settingsForm, "下载工具:", "DownloadURL", cfg.DownloadURL, ref y);
+            AddSettingsField(settingsForm, "使用教程:", "TutorialURL", cfg.TutorialURL, ref y);
+            AddSettingsField(settingsForm, "客户端下载:", "ClientURL", cfg.ClientURL, ref y);
+            AddSettingsField(settingsForm, "更新检测(JSON):", "UpdateURL", cfg.UpdateURL, ref y);
             y += 10;
-            AddSettingsField(settingsForm, "\u672c\u5730\u5217\u8868:", "LocalListExe", cfg.LocalListExe, ref y);
-            AddSettingsField(settingsForm, "\u8865\u4e01\u6587\u4ef6:", "PatchFile", cfg.PatchFile, ref y);
-            AddSettingsField(settingsForm, "\u670d\u52a1\u7aef\u7a0b\u5e8f:", "ServerExe", cfg.ServerExe, ref y);
-            AddSettingsField(settingsForm, "\u767b\u9646\u5668:", "LauncherExe", cfg.LauncherExe, ref y);
-            AddSettingsField(settingsForm, "\u7269\u54c1\u67e5\u770b\u5668:", "ViewerExe", cfg.ViewerExe, ref y);
+            AddSettingsField(settingsForm, "本地列表:", "LocalListExe", cfg.LocalListExe, ref y);
+            AddSettingsField(settingsForm, "补丁文件:", "PatchFile", cfg.PatchFile, ref y);
+            AddSettingsField(settingsForm, "服务端程序:", "ServerExe", cfg.ServerExe, ref y);
+            AddSettingsField(settingsForm, "登陆器:", "LauncherExe", cfg.LauncherExe, ref y);
+            AddSettingsField(settingsForm, "物品查看器:", "ViewerExe", cfg.ViewerExe, ref y);
             y += 10;
-            AddSettingsField(settingsForm, "\u5e95\u90e8\u6587\u5b57:", "FootNote", cfg.FootNote, ref y);
-            AddSettingsField(settingsForm, "\u95f2\u9c7cID:", "XianyuID", cfg.XianyuID, ref y);
+            AddSettingsField(settingsForm, "底部文字:", "FootNote", cfg.FootNote, ref y);
+            AddSettingsField(settingsForm, "闲鱼ID:", "XianyuID", cfg.XianyuID, ref y);
 
             Button saveBtn = new Button();
-            saveBtn.Text = "\u4fdd\u5b58";
+            saveBtn.Text = "保存";
             saveBtn.Size = new Size(80, 30);
             saveBtn.Location = new Point(350, y + 10);
             saveBtn.FlatStyle = FlatStyle.Flat;
@@ -473,7 +470,6 @@ namespace YueyouLauncher
             saveBtn.ForeColor = Color.White;
             saveBtn.Click += (s, ev) =>
             {
-                // Collect values from text boxes
                 foreach (Control c in settingsForm.Controls)
                 {
                     if (c is TextBox && c.Tag != null)
@@ -500,15 +496,15 @@ namespace YueyouLauncher
                 try
                 {
                     SaveConfig(cfg);
-                    MessageBox.Show("\u8bbe\u7f6e\u5df2\u4fdd\u5b58\uff0c\u90e8\u5206\u8bbe\u7f6e\u9700\u8981\u91cd\u542f\u751f\u6548\u3002", "\u6210\u529f", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("设置已保存，部分设置需要重启生效。", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     settingsForm.Close();
                 }
-                catch (Exception ex) { MessageBox.Show("\u4fdd\u5b58\u5931\u8d25: " + ex.Message, "\u9519\u8bef", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch (Exception ex) { MessageBox.Show("保存失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             };
             settingsForm.Controls.Add(saveBtn);
 
             Button cancelBtn = new Button();
-            cancelBtn.Text = "\u53d6\u6d88";
+            cancelBtn.Text = "取消";
             cancelBtn.Size = new Size(80, 30);
             cancelBtn.Location = new Point(440, y + 10);
             cancelBtn.FlatStyle = FlatStyle.Flat;
@@ -563,7 +559,6 @@ namespace YueyouLauncher
             try
             {
                 string json = File.ReadAllText(path, Encoding.UTF8);
-                // Manual JSON parsing for .NET 3.5 compatibility
                 cfg.OfficialURL = GetJsonValue(json, "official_url") ?? cfg.OfficialURL;
                 cfg.DownloadURL = GetJsonValue(json, "download_url") ?? cfg.DownloadURL;
                 cfg.TutorialURL = GetJsonValue(json, "tutorial_url") ?? cfg.TutorialURL;
@@ -624,22 +619,16 @@ namespace YueyouLauncher
                 if (end < 0) return null;
                 return json.Substring(idx, end - idx);
             }
-            // non-string value
             int endIdx = json.IndexOfAny(new char[] { ',', '}', '\n' }, idx);
             if (endIdx < 0) endIdx = json.Length;
             return json.Substring(idx, endIdx - idx).Trim();
-        }
-
-        private static void ExtractZip(string zipPath, string destDir)
-        {
-            ZipFile.ExtractToDirectory(zipPath, destDir);
         }
 
         private static string AppVersion
         {
             get
             {
-                try { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
+                try { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0"; }
                 catch { return "1.0.0"; }
             }
         }
@@ -652,17 +641,14 @@ namespace YueyouLauncher
         public string TutorialURL = "http://www.yueyoue.cn";
         public string ClientURL = "http://www.yueyoue.cn";
         public string UpdateURL = "";
-        public string LocalListExe = "tools\\\u672c\u5730\u5217\u8868.exe";
+        public string LocalListExe = "tools\\本地列表.exe";
         public string PatchFile = "patch\\client_patch.zip";
         public string ServerExe = "server\\GameServer.exe";
         public string LauncherExe = "client\\GameLauncher.exe";
-        public string ViewerExe = "tools\\\u7269\u54c1\u67e5\u770b\u5668.exe";
-        public string FootNote = "\u5b98\u7f51\uff1ahttp://www.yueyoue.cn";
-        public string XianyuID = "\u95f2\u9c7cID\uff1a\u60a6\u6e38\u7f51\u5355";
+        public string ViewerExe = "tools\\物品查看器.exe";
+        public string FootNote = "官网：http://www.yueyoue.cn";
+        public string XianyuID = "闲鱼ID：悦游网单";
 
-        public static Config Default
-        {
-            get { return new Config(); }
-        }
+        public static Config Default => new Config();
     }
 }
