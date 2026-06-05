@@ -1,4 +1,4 @@
-name: Build Launcher
+name: Build & Release
 
 on:
   push:
@@ -6,49 +6,38 @@ on:
       - 'v*'
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          dotnet-version: '8.0.x'
+          python-version: '3.11'
 
-      - name: Build self-contained exe
-        run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -o output
-
-      - name: Rename output
-        shell: powershell
+      - name: Install dependencies
         run: |
-          Rename-Item output/YueyouLauncher.exe YueyouLauncher_amd64.exe
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build exe
+        run: |
+          pyinstaller yueyou_launcher.spec --clean
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: YueyouLauncher_amd64
-          path: output/YueyouLauncher_amd64.exe
+          name: yueyou-launcher
+          path: dist/悦游网单游戏启动器.exe
 
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
-
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
+      - name: Create Release (on tag push)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
         with:
-          path: artifacts
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: artifacts/YueyouLauncher_amd64/YueyouLauncher_amd64.exe
+          files: dist/悦游网单游戏启动器.exe
           generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
