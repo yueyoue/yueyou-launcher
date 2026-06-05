@@ -7,9 +7,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AssemblyName>YueyouLauncher</AssemblyName>
     <RootNamespace>YueyouLauncher</RootNamespace>
-    <Version>1.0.2.0</Version>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
+    <Version>1.0.3.0</Version>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>1.0.3.0</FileVersion>
     <Company>悦游网单</Company>
     <Product>悦游网单游戏启动器</Product>
     <Description>悦游网单游戏启动器 - 官方下载工具</Description>
