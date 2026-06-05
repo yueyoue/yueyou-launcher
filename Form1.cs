@@ -26,7 +26,6 @@ namespace YueyouLauncher
         private void SetupUI()
         {
             this.Text = "悦游网单游戏启动器";
-            this.Size = new Size(900, 720);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -34,13 +33,13 @@ namespace YueyouLauncher
             this.ForeColor = Color.White;
             this.Font = new Font("Microsoft YaHei", 9f);
             this.DoubleBuffered = true;
+            this.ClientSize = new Size(900, 700);
 
             // ===== 标题栏 =====
             Panel titlePanel = new Panel();
             titlePanel.Dock = DockStyle.Top;
             titlePanel.Height = 56;
             titlePanel.BackColor = Color.FromArgb(0x0D, 0x12, 0x25);
-            titlePanel.Padding = new Padding(20, 0, 12, 0);
 
             Label titleLabel = new Label();
             titleLabel.Text = "🎮 悦游网单游戏启动器";
@@ -59,7 +58,7 @@ namespace YueyouLauncher
             titlePanel.Controls.Add(versionLabel);
 
             Button updateBtn = CreateButton("🔄 检查更新", 100, 28, 9f, false);
-            updateBtn.Location = new Point(720, 12);
+            updateBtn.Location = new Point(780, 12);
             updateBtn.Click += (s, e) => CheckUpdate(true);
             titlePanel.Controls.Add(updateBtn);
 
@@ -70,7 +69,6 @@ namespace YueyouLauncher
             statusPanel.Dock = DockStyle.Top;
             statusPanel.Height = 28;
             statusPanel.BackColor = Color.FromArgb(0x0D, 0x12, 0x25);
-            statusPanel.Padding = new Padding(20, 0, 20, 0);
 
             statusLabel = new Label();
             statusLabel.Text = "● 就绪";
@@ -82,67 +80,11 @@ namespace YueyouLauncher
 
             this.Controls.Add(statusPanel);
 
-            // ===== 主内容区 =====
-            Panel mainPanel = new Panel();
-            mainPanel.Dock = DockStyle.Fill;
-            mainPanel.Padding = new Padding(20, 8, 20, 8);
-            mainPanel.AutoScroll = true;
-
-            // --- 左侧功能栏 ---
-            Panel leftPanel = new Panel();
-            leftPanel.Location = new Point(20, 8);
-            leftPanel.Size = new Size(220, 540);
-
-            int y = 0;
-            leftPanel.Controls.Add(MakeButton("🌐 官方网站", 40, y, () => OpenURL(cfg.OfficialURL)));
-            y += 48;
-            leftPanel.Controls.Add(MakeButton("📥 下载工具", 40, y, () => OpenURL(cfg.DownloadURL)));
-            y += 48;
-            leftPanel.Controls.Add(MakeButton("📖 使用教程", 40, y, () => OpenURL(cfg.TutorialURL)));
-            y += 48;
-            leftPanel.Controls.Add(MakeButton("🔍 物品查看器", 40, y, () => OpenExe(cfg.ViewerExe, "物品查看器")));
-            y += 56;
-            leftPanel.Controls.Add(MakeButton("🛡️ 关闭防火墙", 40, y, () => ToggleFirewall()));
-            y += 48;
-            leftPanel.Controls.Add(MakeButton("🛡️ 关闭杀毒软件", 40, y, () => ToggleDefender()));
-            y += 56;
-
-            Button killBtn = MakeButton("⚡ 一键关闭服务端", 44, y, () => KillGameServer());
-            killBtn.Font = new Font("Microsoft YaHei", 11f, FontStyle.Bold);
-            leftPanel.Controls.Add(killBtn);
-
-            mainPanel.Controls.Add(leftPanel);
-
-            // --- 右侧步骤区 ---
-            Panel rightPanel = new Panel();
-            rightPanel.Location = new Point(260, 8);
-            rightPanel.Size = new Size(600, 540);
-
-            Label stepsTitle = new Label();
-            stepsTitle.Text = "游戏启动步骤";
-            stepsTitle.Font = new Font("Microsoft YaHei", 9f);
-            stepsTitle.ForeColor = Color.Gray;
-            stepsTitle.AutoSize = true;
-            stepsTitle.Location = new Point(0, 0);
-            rightPanel.Controls.Add(stepsTitle);
-
-            int sy = 30;
-            rightPanel.Controls.Add(MakeStepCard("步骤 1", "下载客户端", "下载游戏客户端安装包", () => OpenURL(cfg.ClientURL), ref sy));
-            rightPanel.Controls.Add(MakeStepCard("步骤 2", "打开本地列表", "启动服务器列表查看工具", () => OpenExe(cfg.LocalListExe, "本地列表"), ref sy));
-            rightPanel.Controls.Add(MakeStepCard("步骤 3", "安装客户端补丁", "选择客户端目录后自动解压补丁", () => InstallPatch(), ref sy));
-            rightPanel.Controls.Add(MakeStepCard("步骤 4", "启动服务器", "启动游戏服务端程序", () => StartServer(), ref sy));
-            rightPanel.Controls.Add(MakeStepCard("步骤 5", "打开登陆器", "启动游戏客户端登陆器", () => OpenExe(cfg.LauncherExe, "登陆器"), ref sy));
-
-            mainPanel.Controls.Add(rightPanel);
-
-            this.Controls.Add(mainPanel);
-
             // ===== 底部栏 =====
             Panel bottomPanel = new Panel();
             bottomPanel.Dock = DockStyle.Bottom;
             bottomPanel.Height = 32;
             bottomPanel.BackColor = Color.FromArgb(0x0D, 0x12, 0x25);
-            bottomPanel.Padding = new Padding(20, 0, 20, 0);
 
             LinkLabel footerLink = new LinkLabel();
             footerLink.Text = cfg.FootNote;
@@ -158,7 +100,7 @@ namespace YueyouLauncher
             xianyuLink.LinkColor = Color.FromArgb(0x4a, 0x8a, 0xc0);
             xianyuLink.ActiveLinkColor = Color.White;
             xianyuLink.AutoSize = true;
-            xianyuLink.Location = new Point(600, 8);
+            xianyuLink.Location = new Point(700, 8);
             xianyuLink.LinkClicked += (s, e) =>
             {
                 var now = DateTime.Now;
@@ -175,14 +117,65 @@ namespace YueyouLauncher
             bottomPanel.Controls.Add(xianyuLink);
 
             this.Controls.Add(bottomPanel);
+
+            // ===== 主内容区 (Fill) =====
+            Panel mainPanel = new Panel();
+            mainPanel.Dock = DockStyle.Fill;
+            mainPanel.BackColor = Color.FromArgb(0x0D, 0x12, 0x25);
+
+            // --- 左侧功能栏 ---
+            int leftX = 20;
+            int leftY = 10;
+            int leftW = 210;
+            int btnH = 40;
+            int btnGap = 8;
+
+            mainPanel.Controls.Add(MakeButton("🌐 官方网站", leftW, btnH, leftX, leftY, () => OpenURL(cfg.OfficialURL)));
+            leftY += btnH + btnGap;
+            mainPanel.Controls.Add(MakeButton("📥 下载工具", leftW, btnH, leftX, leftY, () => OpenURL(cfg.DownloadURL)));
+            leftY += btnH + btnGap;
+            mainPanel.Controls.Add(MakeButton("📖 使用教程", leftW, btnH, leftX, leftY, () => OpenURL(cfg.TutorialURL)));
+            leftY += btnH + btnGap;
+            mainPanel.Controls.Add(MakeButton("🔍 物品查看器", leftW, btnH, leftX, leftY, () => OpenExe(cfg.ViewerExe, "物品查看器")));
+            leftY += btnH + btnGap + 8;
+            mainPanel.Controls.Add(MakeButton("🛡️ 关闭防火墙", leftW, btnH, leftX, leftY, () => ToggleFirewall()));
+            leftY += btnH + btnGap;
+            mainPanel.Controls.Add(MakeButton("🛡️ 关闭杀毒软件", leftW, btnH, leftX, leftY, () => ToggleDefender()));
+            leftY += btnH + btnGap + 8;
+            mainPanel.Controls.Add(MakeButton("⚡ 一键关闭服务端", leftW, btnH + 4, leftX, leftY, () => KillGameServer()));
+
+            // --- 右侧步骤区 ---
+            int rightX = 250;
+            int rightY = 10;
+
+            Label stepsTitle = new Label();
+            stepsTitle.Text = "游戏启动步骤";
+            stepsTitle.Font = new Font("Microsoft YaHei", 10f);
+            stepsTitle.ForeColor = Color.Gray;
+            stepsTitle.AutoSize = true;
+            stepsTitle.Location = new Point(rightX, rightY);
+            mainPanel.Controls.Add(stepsTitle);
+            rightY += 28;
+
+            mainPanel.Controls.Add(MakeStepCard("步骤 1", "下载客户端", "下载游戏客户端安装包", rightX, rightY, () => OpenURL(cfg.ClientURL)));
+            rightY += 64;
+            mainPanel.Controls.Add(MakeStepCard("步骤 2", "打开本地列表", "启动服务器列表查看工具", rightX, rightY, () => OpenExe(cfg.LocalListExe, "本地列表")));
+            rightY += 64;
+            mainPanel.Controls.Add(MakeStepCard("步骤 3", "安装客户端补丁", "选择客户端目录后自动解压补丁", rightX, rightY, () => InstallPatch()));
+            rightY += 64;
+            mainPanel.Controls.Add(MakeStepCard("步骤 4", "启动服务器", "启动游戏服务端程序", rightX, rightY, () => StartServer()));
+            rightY += 64;
+            mainPanel.Controls.Add(MakeStepCard("步骤 5", "打开登陆器", "启动游戏客户端登陆器", rightX, rightY, () => OpenExe(cfg.LauncherExe, "登陆器")));
+
+            this.Controls.Add(mainPanel);
         }
 
-        private Button MakeButton(string text, int height, int y, Action onClick)
+        private Button MakeButton(string text, int width, int height, int x, int y, Action onClick)
         {
             Button btn = new Button();
             btn.Text = text;
-            btn.Size = new Size(220, height);
-            btn.Location = new Point(0, y);
+            btn.Size = new Size(width, height);
+            btn.Location = new Point(x, y);
             btn.FlatStyle = FlatStyle.Flat;
             btn.FlatAppearance.BorderSize = 0;
             btn.BackColor = Color.FromArgb(0x1a, 0x24, 0x3b);
@@ -207,11 +200,11 @@ namespace YueyouLauncher
             return btn;
         }
 
-        private Panel MakeStepCard(string stepNum, string title, string desc, Action onClick, ref int y)
+        private Panel MakeStepCard(string stepNum, string title, string desc, int x, int y, Action onClick)
         {
             Panel card = new Panel();
-            card.Size = new Size(600, 56);
-            card.Location = new Point(0, y);
+            card.Size = new Size(630, 56);
+            card.Location = new Point(x, y);
             card.BackColor = Color.FromArgb(0x1a, 0x24, 0x3b);
 
             Label numLabel = new Label();
@@ -241,7 +234,7 @@ namespace YueyouLauncher
             Button openBtn = new Button();
             openBtn.Text = "打开";
             openBtn.Size = new Size(70, 30);
-            openBtn.Location = new Point(510, 13);
+            openBtn.Location = new Point(545, 13);
             openBtn.FlatStyle = FlatStyle.Flat;
             openBtn.FlatAppearance.BorderColor = Color.FromArgb(0x4a, 0x8a, 0xc0);
             openBtn.ForeColor = Color.FromArgb(0x4a, 0x8a, 0xc0);
@@ -250,7 +243,6 @@ namespace YueyouLauncher
             openBtn.Click += (s, e) => onClick();
             card.Controls.Add(openBtn);
 
-            y += 64;
             return card;
         }
 
@@ -654,4 +646,3 @@ namespace YueyouLauncher
         public static Config Default => new Config();
     }
 }
-
