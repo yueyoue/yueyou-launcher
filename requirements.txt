@@ -1,1 +1,3 @@
-pyinstaller>=6.0
+nuitka>=2.0
+ordered-set
+zstandard

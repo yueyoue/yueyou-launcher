@@ -3,8 +3,13 @@ __pycache__/
 *.pyo
 dist/
 build/
+*.spec
 *.spec.bak
 *.egg-info/
 .eggs/
 *.egg
 config.json
+main.build/
+main.dist/
+main.onefile-build/
+*.exe
