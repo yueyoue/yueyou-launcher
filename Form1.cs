@@ -6,11 +6,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using System.Net;
-using System.Web.Script.Serialization;
 
 namespace YueyouLauncher
 {
@@ -633,26 +632,7 @@ namespace YueyouLauncher
 
         private static void ExtractZip(string zipPath, string destDir)
         {
-            // .NET 3.5 doesn't have System.IO.Compression, use Shell32
-            // Actually, we can use GZipStream + manual tar, or just shell out
-            // For simplicity, use Process to extract
-            string tempDir = Path.Combine(Path.GetTempPath(), "yueyou_patch_" + Guid.NewGuid().ToString("N"));
-            Directory.CreateDirectory(tempDir);
-
-            // Use .NET's built-in zip support via shell
-            // Since .NET 3.5 doesn't have ZipFile, we'll use a different approach
-            // Use powershell to extract
-            ProcessStartInfo psi = new ProcessStartInfo("powershell",
-                string.Format("-Command \"Expand-Archive -Path '{0}' -DestinationPath '{1}' -Force\"", zipPath, destDir));
-            psi.CreateNoWindow = true;
-            psi.UseShellExecute = false;
-            Process p = Process.Start(psi);
-            p.WaitForExit();
-            if (p.ExitCode != 0)
-            {
-                // Fallback: try with .NET 4.5+ method via powershell
-                throw new Exception("解压失败，退出码: " + p.ExitCode);
-            }
+            ZipFile.ExtractToDirectory(zipPath, destDir);
         }
 
         private static string AppVersion

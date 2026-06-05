@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>YueyouLauncher</RootNamespace>
     <AssemblyName>YueyouLauncher</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <ManifestKeyFile>app.manifest</ManifestKeyFile>
@@ -38,6 +38,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Form1.cs">
