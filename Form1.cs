@@ -26,13 +26,14 @@ namespace YueyouLauncher
         private void SetupUI()
         {
             this.Text = "悦游网单游戏启动器";
-            this.Size = new Size(880, 660);
+            this.Size = new Size(900, 720);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.BackColor = Color.FromArgb(0x0D, 0x12, 0x25);
             this.ForeColor = Color.White;
             this.Font = new Font("Microsoft YaHei", 9f);
+            this.DoubleBuffered = true;
 
             // ===== 标题栏 =====
             Panel titlePanel = new Panel();
@@ -85,11 +86,12 @@ namespace YueyouLauncher
             Panel mainPanel = new Panel();
             mainPanel.Dock = DockStyle.Fill;
             mainPanel.Padding = new Padding(20, 8, 20, 8);
+            mainPanel.AutoScroll = true;
 
             // --- 左侧功能栏 ---
             Panel leftPanel = new Panel();
             leftPanel.Location = new Point(20, 8);
-            leftPanel.Size = new Size(200, 480);
+            leftPanel.Size = new Size(220, 540);
 
             int y = 0;
             leftPanel.Controls.Add(MakeButton("🌐 官方网站", 40, y, () => OpenURL(cfg.OfficialURL)));
@@ -113,8 +115,8 @@ namespace YueyouLauncher
 
             // --- 右侧步骤区 ---
             Panel rightPanel = new Panel();
-            rightPanel.Location = new Point(240, 8);
-            rightPanel.Size = new Size(600, 480);
+            rightPanel.Location = new Point(260, 8);
+            rightPanel.Size = new Size(600, 540);
 
             Label stepsTitle = new Label();
             stepsTitle.Text = "游戏启动步骤";
@@ -179,7 +181,7 @@ namespace YueyouLauncher
         {
             Button btn = new Button();
             btn.Text = text;
-            btn.Size = new Size(200, height);
+            btn.Size = new Size(220, height);
             btn.Location = new Point(0, y);
             btn.FlatStyle = FlatStyle.Flat;
             btn.FlatAppearance.BorderSize = 0;
