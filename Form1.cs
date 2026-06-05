@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
-using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Windows.Forms;
 
@@ -410,8 +410,8 @@ namespace YueyouLauncher
             }
             try
             {
-                WebClient wc = new WebClient();
-                string json = wc.DownloadString(cfg.UpdateURL);
+                using HttpClient hc = new HttpClient();
+                string json = hc.GetStringAsync(cfg.UpdateURL).GetAwaiter().GetResult();
                 string ver = GetJsonValue(json, "version");
                 string dlUrl = GetJsonValue(json, "download_url");
                 string changelog = GetJsonValue(json, "changelog");
@@ -652,3 +652,4 @@ namespace YueyouLauncher
         public static Config Default => new Config();
     }
 }
+
